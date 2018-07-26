@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from PySide2 import QtWidgets, QtCore, QtGui
 from nvidiagpu import NvidiaGPU
 import sys
