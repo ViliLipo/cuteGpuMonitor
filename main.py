@@ -1,13 +1,29 @@
 #!/usr/bin/python3
 from PySide2 import QtWidgets, QtCore, QtGui
-from nvidiagpu import NvidiaGPU
+from nvidiagpu import NvidiaGPU, getGpus
 import sys
+
+
+class MainView(QtWidgets.QWidget):
+    def __init__(self):
+        QtWidgets.QWidget.__init__(self)
+        self.layout = QtWidgets.QVBoxLayout()
+        self.monitors = []
+        for gpu in getGpus():
+            monitor = GpuMonitor(gpu)
+            self.layout.addWidget(monitor)
+            self.monitors.append(monitor)
+        self.setLayout(self.layout)
+
+    def update(self):
+        for monitor in self.monitors:
+            monitor.show_values()
 
 
 class GpuMonitor(QtWidgets.QWidget):
     """Coolshiit"""
 
-    def __init__(self):
+    def __init__(self, gpu):
         QtWidgets.QWidget.__init__(self)
         self.top_level_layout = QtWidgets.QVBoxLayout()
         self.layout = QtWidgets.QGridLayout()
@@ -112,7 +128,7 @@ class GpuMonitor(QtWidgets.QWidget):
         self.top_level_layout.setAlignment(QtCore.Qt.AlignTop)
         self.setLayout(self.top_level_layout)
         self.setMinimumWidth(200)
-        self.gpu = NvidiaGPU()
+        self.gpu = gpu
 
     def show_values(self):
         self.gpu.update()
@@ -168,10 +184,10 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     app.setApplicationName("Cute n' VideoCards")
 
-    widget = GpuMonitor()
+    widget = MainView()
     widget.show()
     timer = QtCore.QTimer()
-    timer.timeout.connect(widget.show_values)
+    timer.timeout.connect(widget.update)
     timer.setInterval(500)
     timer.start()
     sys.exit(app.exec_())

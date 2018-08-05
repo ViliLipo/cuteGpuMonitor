@@ -4,10 +4,20 @@ import sys
 from math import floor
 
 
+def getGpus():
+    """Get information for all of the Nvidia GPUS in this system"""
+    nvmlInit()
+    gpu_list = []
+    for i in range(0, nvmlDeviceGetCount()):
+        handle = nvmlDeviceGetHandleByIndex(i)
+        gpu_list.append(NvidiaGPU(handle))
+    return gpu_list
+
+
 class NvidiaGPU():
     """Accesses nvidia information through nvidia-smi"""
 
-    def __init__(self):
+    def __init__(self, handle):
         """Init monitoring"""
         self.recorders = []
         self.temp_recorder = ValueRecorder(self.getGpuTemp)
@@ -25,8 +35,7 @@ class NvidiaGPU():
         self.recorders.append(self.gpu_util_recorder)
         self.mem_util_recorder = ValueRecorder(self.getMemoryUtilization)
         self.recorders.append(self.mem_util_recorder)
-        nvmlInit()
-        self.handle = nvmlDeviceGetHandleByIndex(0)
+        self.handle = handle
 
     def update(self):
         """Updates the values for recorders"""
@@ -97,8 +106,7 @@ class NvidiaGPU():
     def getPerfCapReason(self):
         reasons = {0: "None", 1: "GPU Idle", 2: "Application settings",
                    4: "Software powercap", 8: "Hardware slowdown"
-                 }
-        print(nvmlDeviceGetCurrentClocksThrottleReasons(self.handle))
+                   }
         return reasons[nvmlDeviceGetCurrentClocksThrottleReasons(self.handle)]
 
 
@@ -111,11 +119,13 @@ class ValueRecorder():
         self.function = func
         self.value = 0
         self.average = 0
+        self.valueList = []
 
     def update(self):
         self.value = self.function()
         self.min = min(self.value, self.min)
         self.max = max(self.value, self.max)
+        self.valueList.append(self.value)
         try:
             self.sum = self.sum + self.value
             self.count = self.count + 1
