@@ -20,20 +20,20 @@ class NvidiaGPU():
     def __init__(self, handle):
         """Init monitoring"""
         self.recorders = []
-        self.temp_recorder = ValueRecorder(self.getGpuTemp)
+        self.temp_recorder = ValueRecorder(self.getGpuTemp, "C")
         self.recorders.append(self.temp_recorder)
-        self.gpu_clock_recorder = ValueRecorder(self.getGpuClock)
+        self.gpu_clock_recorder = ValueRecorder(self.getGpuClock, "MHz")
         self.recorders.append(self.gpu_clock_recorder)
         self.memory_clock_recorder = ValueRecorder(
-                self.getGpuMemoryClock)
+                self.getGpuMemoryClock, "MHz")
         self.recorders.append(self.memory_clock_recorder)
-        self.fan_recorder = ValueRecorder(self.getGpuFanSpeed)
+        self.fan_recorder = ValueRecorder(self.getGpuFanSpeed, "%")
         self.recorders.append(self.fan_recorder)
-        self.power_recorder = ValueRecorder(self.getGpuPowerUsage)
+        self.power_recorder = ValueRecorder(self.getGpuPowerUsage, "W")
         self.recorders.append(self.power_recorder)
-        self.gpu_util_recorder = ValueRecorder(self.getGpuUtilization)
+        self.gpu_util_recorder = ValueRecorder(self.getGpuUtilization, "%")
         self.recorders.append(self.gpu_util_recorder)
-        self.mem_util_recorder = ValueRecorder(self.getMemoryUtilization)
+        self.mem_util_recorder = ValueRecorder(self.getMemoryUtilization, "%")
         self.recorders.append(self.mem_util_recorder)
         self.handle = handle
 
@@ -111,7 +111,7 @@ class NvidiaGPU():
 
 
 class ValueRecorder():
-    def __init__(self, func):
+    def __init__(self, func, unit):
         self.min = sys.maxsize
         self.max = sys.maxsize * -1
         self.sum = 0
