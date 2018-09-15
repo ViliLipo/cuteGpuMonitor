@@ -1,5 +1,5 @@
 # cuteGpuMonitor
-## Nvidia GPU monitoring widget
+## Linux Nvidia GPU monitoring widget
 This is a Gpu monitor widget For Linux Nvidia proprietary drivers.
 Made using PySide2 and py3nvml.
 
