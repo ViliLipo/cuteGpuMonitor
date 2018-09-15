@@ -1,5 +1,5 @@
 # cuteGpuMonitor
-Gpumonitorwidget For Nvidia proprietary drivers. Made using PySide2 and Py3Nvml.
+Gpumonitorwidget For Nvidia proprietary drivers. Made using PySide2 and py3nvml.
 
 
 ## Purpose

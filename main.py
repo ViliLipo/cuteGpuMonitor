@@ -182,7 +182,7 @@ class GpuMonitor(QtWidgets.QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    app.setApplicationName("Cute n' VideoCards")
+    app.setApplicationName("Cute GPU Monitor")
 
     widget = MainView()
     widget.show()
