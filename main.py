@@ -121,9 +121,9 @@ class GpuMonitor(QtWidgets.QWidget):
         self.layout.addWidget(self.memory_util_max, 7, 4)
         self.layout.addWidget(QtWidgets.QLabel("%"), 7, 5)
         # Build layout
-        self.top_level_layout.addWidget(self.name_label, 0, 0)
-        self.top_level_layout.addWidget(self.driverVersion_label, 0, 0)
-        self.top_level_layout.addLayout(self.layout, 0)
+        self.top_level_layout.addWidget(self.name_label)
+        self.top_level_layout.addWidget(self.driverVersion_label)
+        self.top_level_layout.addLayout(self.layout)
         self.layout.setAlignment(QtCore.Qt.AlignTop)
         self.top_level_layout.setAlignment(QtCore.Qt.AlignTop)
         self.setLayout(self.top_level_layout)
